@@ -1,7 +1,9 @@
 from flask import Flask
+app = Flask(__name__)
 
-application = Flask(__name__)
-
-@application.route("/")
+@app.route('/')
 def hello_world():
-    return "<p>Hello, World! C'mon AWS, this has to work!</p>"
+   return "Hello, World!"
+
+if __name__ == "__main__":
+   app.run(host='0.0.0.0', port=5000)

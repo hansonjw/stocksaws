@@ -11,4 +11,17 @@
 - [] Push updates to github
 - [] Check if application is still live and updates are there
 
-## Notes:
+## help
+https://aws.amazon.com/getting-started/hands-on/serve-a-flask-app/
+
+
+## Attempt 1
+- Failed...
+- didn't have a `requirement.txt` file...likely an issue as AWS didn't know about flask
+- what the heck is AWS lightsail?
+
+## Notes and Thoughts:
+- first deployment attempt, main py file is named `application.py`, note Flask docs typically start with app
+-
+- In the context of my personal website, is it as simple as renaming the main folder to 'application'?
+- I didn't create a `requirements.txt` file
