@@ -13,6 +13,7 @@
 
 ## help
 https://aws.amazon.com/getting-started/hands-on/serve-a-flask-app/
+https://www.youtube.com/watch?v=4tDjVFbi31o
 
 
 ## Attempt 1

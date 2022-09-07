@@ -1,9 +1,11 @@
 from flask import Flask
-app = Flask(__name__)
+application = Flask(__name__)
 
-@app.route('/')
+# application instead of app, convention with AWS
+@application.route('/')
 def hello_world():
    return "Hello, World!"
 
-if __name__ == "__main__":
-   app.run(host='0.0.0.0', port=5000)
+# This was included for the tutorial of lightsail
+# if __name__ == "__main__":
+#    app.run(host='0.0.0.0', port=5000)
