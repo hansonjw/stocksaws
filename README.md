@@ -21,6 +21,10 @@ https://www.youtube.com/watch?v=4tDjVFbi31o
 - didn't have a `requirement.txt` file...likely an issue as AWS didn't know about flask
 - what the heck is AWS lightsail?
 
+## Attempt 2
+- it worked!
+- not completely sure but filename `application.py`, `application` instead of `app` in the code seemed to work
+
 ## Notes and Thoughts:
 - first deployment attempt, main py file is named `application.py`, note Flask docs typically start with app
 -
