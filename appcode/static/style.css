@@ -1,0 +1,144 @@
+body {
+    font-family: Optima, sans-serif;
+    padding-top: 4rem;
+    padding-bottom: 3rem;
+    background-color: #DC7633;
+}
+
+.base-div {
+    padding-left: 15%;
+    padding-right: 15%;
+}
+
+@media (max-width:1000px){
+    .base-div {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+}
+
+@media (max-width:500px){
+    .base-div {
+        padding-left: 1%;
+        padding-right: 1%;
+    }
+} 
+
+.navbar {
+    overflow: hidden;
+    background-color:#BA4A00;
+    position: fixed; /* Set the navbar to fixed position */
+    top: 0; /* Position the navbar at the top of the page */
+    width: 100%; /* Full width */
+  }
+
+.nav-link{
+    margin:auto;
+    text-align: center;
+    color:  #ECF0F1;
+    font-size: 1rem;
+}
+
+@media (max-width:800px){
+    .nav-link{
+        font-size: .9rem;
+        /* padding: .5rem */
+    }
+}
+
+@media (max-width:500px){
+    .nav-link{
+        font-size: .7rem;
+        padding: .5rem;
+    }
+}
+
+.navbar-brand{
+    color: #ECF0F1;
+    font-size: 1.5rem;
+    pointer-events: none;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link{
+    border-style: solid;
+    border-color: #ECF0F1;
+    background-color: #1F618D;
+    color:#ECF0F1;
+    border-radius: 0.5rem;
+}
+
+.nav-pills .nav-link {
+    border: 0.2rem;
+    border-style: solid;
+    border-color: #DC7633;
+    background-color: #BA4A00;
+    color:#ECF0F1;
+    border-radius: 0.5rem;
+}
+
+.nav-item {
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
+@media (max-width:800px){
+    .nav-item {
+        margin-left: .5rem;
+        margin-right: .5rem;
+    }
+}
+
+@media (max-width:400px){
+    .nav-item {
+        margin-left: 0rem;
+        margin-right: 0rem;
+    }
+}
+
+
+.chart-frame{
+    justify-content: center;
+    padding: 0.5rem;
+    margin: 2rem;
+    border-radius: 0.5rem;
+    background-color: #ECF0F1;
+    border-style: solid;
+    border-color:#1F618D;
+    border-color: #BA4A00;
+}
+.chart{
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.chart img{
+    border-radius: 0.5rem;
+    max-width: 100%;
+    height: auto;
+}
+
+.chart-caption{
+    display: flex;
+    justify-content: center;
+    border-radius: 0.5rem;
+    align-items: center;
+    margin: 1rem;
+    color:#1F618D;
+}
+
+.page-text{
+    display: flex;
+    justify-content: center;
+    border-radius: 0.5rem;
+    align-items: center;
+    margin: 1rem;
+}
+
+.page-text p {
+    color: #ECF0F1;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 1rem;
+}
