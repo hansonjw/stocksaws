@@ -1,11 +1,35 @@
+import os
 from flask import Flask
-application = Flask(__name__)
 
-# application instead of app, convention with AWS
-@application.route('/')
-def hello_world():
-   return "Hello, World! way to go AWS, this is working!?"
+def create_app(test_config=None):
+    # create and configure the app
+    app = Flask(__name__, instance_relative_config=True)
+    app.config.from_mapping(
+        SECRET_KEY='dev',
+        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
+    )
 
-# This was included for the tutorial of lightsail
-# if __name__ == "__main__":
-#    app.run(host='0.0.0.0', port=5000)
+    if test_config is None:
+        # load the instance config, if it exists, when not testing
+        app.config.from_pyfile('config.py', silent=True)
+    else:
+        # load the test config if passed in
+        app.config.from_mapping(test_config)
+
+    # ensure the instance folder exists
+    try:
+        os.makedirs(app.instance_path)
+    except OSError:
+        pass
+
+    # a simple page that says hello
+    @app.route('/')
+    def hello():
+        return 'Hello, AWS!'
+
+    import routes
+    app.register_blueprint(routes.bp)
+   
+    return app
+
+application = create_app()
