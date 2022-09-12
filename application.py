@@ -32,5 +32,4 @@ def create_app(test_config=None):
    
     return app
 
-bingobango = create_app()
-# print(bingobango.__name__)
+application = create_app()
