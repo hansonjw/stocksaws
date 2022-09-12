@@ -27,7 +27,7 @@ def create_app(test_config=None):
     def hello():
         return '<p>Hello, AWS!</p><a href="/aws">aws link</a>'
 
-    import application.routes as routes
+    import appcode.routes as routes
     app.register_blueprint(routes.bp)
    
     return app
