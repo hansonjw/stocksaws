@@ -11,30 +11,13 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg">
-        <!-- <div class="container-fluid"> -->
-
-            <!-- <a class="navbar-brand justify-content-center">Otium</a> -->
-        
             <div class="navbar justify-content-center">
                 <ul class="nav nav-pills">
                     <li class="nav-item">
-                        <a class="{{ 'nav-link active' if active_page=='welcome' else 'nav-link' }}" href="{{ url_for('market.index') }}">Welcome</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="{{ 'nav-link active' if active_page=='history' else 'nav-link' }}" href="{{ url_for('market.history') }}">History</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="{{ 'nav-link active' if active_page=='cagr' else 'nav-link' }}" href="{{ url_for('market.cagr')}}">CAGR</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="{{ 'nav-link active' if active_page=='today' else 'nav-link' }}" href="{{ url_for('market.today') }}">Today</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="{{ 'nav-link active' if active_page=='cycles' else 'nav-link' }}" href="{{ url_for('market.cycles')}}">Cycles</a>
+                        <a class="{{ 'nav-link active' if active_page=='today' else 'nav-link' }}" href="{{ url_for('routes.today') }}">Today</a>
                     </li>
                 </ul>
             </div>
-        <!-- </div> -->
     </nav>
     <div class="container-fluid base-div">
         {% block content %}

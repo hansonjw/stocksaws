@@ -25,9 +25,9 @@ def create_app(test_config=None):
     # a simple page that says hello
     @app.route('/')
     def hello():
-        return '<p>Hello, AWS!</p><a href="/base">base link</a>'
+        return '<p>Hello, AWS!</p><a href="/today">today link</a>'
 
-    import appcode.routes as routes
+    import appcode.routes.routes as routes
     app.register_blueprint(routes.bp)
    
     return app
