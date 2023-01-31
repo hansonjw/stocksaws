@@ -195,7 +195,7 @@ def lineDebt(d):
     chart.stackplot(x1, y1, color='#2874A6')
 
     # Annotate chart
-    chart.set(xlim=(1900, 2025), xticks=np.arange(1900, 2025, 25), ylim=(0, 40), yticks=np.arange(0, 40, 5))
+    chart.set(xlim=(1900, 2025), xticks=np.arange(1900, 2025, 10), ylim=(0, 40), yticks=np.arange(0, 40, 5))
     chart.set_title("Historical U.S. Federal Debt, $T   (source: https://fiscaldata.treasury.gov/")
     strEnd = f"${round(y1.iloc[-1], 1)}T"
     chart.text(x1.iloc[-1]-10, y1.iloc[-1], strEnd, color='#DC7633')
