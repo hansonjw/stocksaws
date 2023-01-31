@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% set active_page="history" %}
+
+{% block content %}
+
+{% for d in data %}
+    <div class="chart-frame">
+        <div class="chart">
+            <img src='data:image/png;base64,{{ d }}'/>
+        </div>
+    </div> 
+{% endfor %}
+
+{% endblock %}

@@ -5,6 +5,7 @@ import matplotlib
 from matplotlib.figure import Figure
 import datetime
 import pandas as pd
+import numpy as np
 
 
 class colorDictObj:
@@ -40,15 +41,15 @@ class colorDictObj:
         return self.colorDict
 
 
-def todayPlot(d, annLow=True, annHigh=False):
+def todayPlot(d, annLow=False, annHigh=False, annGr=False):
     fig = Figure(figsize=(10,6))
     # fig = Figure()
     chart = fig.subplots()
 
     x1 = d.index
     y1 = d.values
-
     chart.plot(x1, y1, color='#2874A6', marker='', linewidth=1)
+    
     chart.set_xlabel('Date')
     highDate = d.index[0]
 
@@ -62,6 +63,15 @@ def todayPlot(d, annLow=True, annHigh=False):
     dateF = today_date.to_pydatetime().strftime("%b %d, %Y")
     dateS = start_date.to_pydatetime().strftime("%b %d, %Y")
     dateM = min_date.to_pydatetime().strftime("%b %d, %Y")
+    annCagr = ""
+
+    if annGr:
+        y2 = [1]
+        dgr = (y1[-1]/y1[0])**(1/len(y1)) - 1
+        for x in x1[1:]:
+            y2.append(y2[-1]*(1+dgr))
+        chart.plot(x1, y2, color='grey', marker='', linewidth=.5)
+        annCagr = f"\nCAGR: {round(dgr*365*100, 2)}%"
 
 
     if annLow:
@@ -74,7 +84,7 @@ def todayPlot(d, annLow=True, annHigh=False):
         chart.text(x1[0], y1[0], strStart, color='#DC7633')
         chart.set_title(f"S&P 500 - Since all time high on {highDate.to_pydatetime().strftime('%b %d, %Y')}")
     else:
-        strToday = f"{dateF}: {round(today_val, 1)}"
+        strToday = f"{dateF}: {round(today_val, 1)}" + annCagr
         strStart = f"{dateS}: {round(start_val)}"
         chart.plot([today_date, start_date],[today_val, start_val], marker="o", linestyle="None", color='#DC7633')
         chart.text(x1[-1], y1[-1], strToday, color='#DC7633')
@@ -94,17 +104,23 @@ def todayPlot(d, annLow=True, annHigh=False):
     chart.spines["right"].set_visible(False)
     chart.spines["top"].set_visible(False)
     
+    # return image/png file
     buf = BytesIO()
     fig.savefig(buf, format="png")
     return base64.b64encode(buf.getbuffer()).decode("ascii")
 
 
-def histPlot(d, growth=False, log=False):
+def histPlot(din, growth=False, log=False):
+    
+    # munge data
+    newDateRange = pd.date_range('1/1/1950', din.index[-1]) 
+    d = din.Close.reindex(newDateRange, method='bfill')/din.Close[0]
+
+    # create basic Plot
     fig = Figure(figsize=(10,6))
     chart = fig.subplots()
     x1 = d.index
-    y1 = d.Close
-
+    y1 = d.values
     chart.plot(x1, y1, color='#2874A6', marker='', linewidth=0.5)
 
     # formatting for the chart
@@ -113,48 +129,81 @@ def histPlot(d, growth=False, log=False):
     chart.tick_params(labelcolor='black')
     chart.set_title("S&P 500 Historical Prices")
 
-    # Annotate starting value...
+    # Annotate starting and ending datapoints and strings...
     dateS = x1[0].to_pydatetime().strftime("%b %d, %Y")
     dateE = x1[-1].to_pydatetime().strftime("%b %d, %Y")
     start_val = y1[0]
     end_val = y1[-1]
     strStart = f" {dateS}: {round(start_val)}"
     strEnd = f" {dateE}: {round(end_val)}"
-    # Annotation is in options for Log scale
     chart.plot([x1[0], x1[-1]],[start_val, end_val], marker="o", linestyle="None", color='#DC7633')
 
     # If growth flag is True, growth curves will be plotted
     if growth == True:
-        x2 = d.index
-        y2 = d.growth
-        x3 = d.index
-        y3 = d.growthHigh
-        x4 = d.index
-        y4 = d.growthLow
-        chart.plot(x2, y2, color='#E67E22', marker='', linewidth=1.0)
-        chart.plot(x3, y3, color='#F8C471', marker='', linewidth=0.5)
-        chart.plot(x4, y4, color='#F8C471', marker='', linewidth=0.5)
+        
+        # Calculate growth curves
+        dgr = ((d[-1]/d[0]) ** (1/len(d)))
+        dgrHi = ((dgr - 1)*365*100+.5)/(365*100) + 1
+        dgrLo = ((dgr - 1)*365*100-.5)/(365*100) + 1
+        
+        y2, y3, y4 = [1], [1], [1]
+        for n in range(len(x1)-1):
+            y2.append(y2[-1]*(dgr))
+            y3.append(y3[-1]*(dgrHi))
+            y4.append(y4[-1]*(dgrLo))
+
+        # add growth curves to plot
+        chart.plot(x1, y2, color='#E67E22', marker='', linewidth=1.0)
+        chart.plot(x1, y3, color='#F8C471', marker='', linewidth=0.5)
+        chart.plot(x1, y4, color='#F8C471', marker='', linewidth=0.5)
 
         # Annotate growth curve with rate and ending value...
-        cagr = 365 * ((d['Close'][-1])**(1/len(d.index)) - 1)
-        strEnd = f" {dateE}: {round(end_val)}\n (CAGR: {round(cagr*100, 2)}%)"
-        # chart.text(x2[-1], y2[-1], strCagr, color='#DC7633')
+        cagr = 365 * (dgr-1)
+        # strEnd = f" {dateE}: {round(end_val)}\n (CAGR: {round(cagr*100, 2)}%)"
+        strEnd = f"CAGR: {round(cagr*100, 2)}%"
 
-        chart.text(x3[-1], y3[-1], f"{round(cagr*100+0.5, 2)}% (+0.5%)", color='#DC7633')
-        chart.text(x4[-2], y4[-2], f"{round(cagr*100-0.5, 2)}% (-0.5%)", color='#DC7633')
+        chart.text(x1[-1], y3[-1], f"{round(cagr*100+0.5, 2)}% (+0.5%)", color='#DC7633')
+        chart.text(x1[-2], y4[-2], f"{round(cagr*100-0.5, 2)}% (-0.5%)", color='#DC7633')
 
     # Options for log scale
     if log == True:
         chart.set_yscale('log')
         chart.set_title("S&P 500 Historical Prices (Log Scale)")
-        chart.text(x1[0], y1[0], strStart, color='#DC7633')
 
-    chart.text(x1[0], y1[0]+5, strStart, color='#DC7633')
+    chart.text(x1[0], y1[0], strStart, color='#DC7633')
     chart.text(x1[-1], y1[-1]+5, strEnd, color='#DC7633')
 
     # Save it to a temporary buffer.
     buf = BytesIO()
     fig.savefig(buf, format="png")
+    # Embed the result in the html output.
+    return base64.b64encode(buf.getbuffer()).decode("ascii")
+
+
+def lineDebt(d):
+    # munge data
+    d.sort_values(by=['year'], inplace=True)
+    d.debtTr = d.debt/10**12
+
+    dFilter = d.query('year>=1900')
+
+    # chart basics
+    fig = Figure(figsize=(10,6))
+    chart = fig.subplots()
+    x1 = d.year
+    y1 = d.debtTr
+    chart.stackplot(x1, y1, color='#2874A6')
+
+    # Annotate chart
+    chart.set(xlim=(1900, 2025), xticks=np.arange(1900, 2025, 25), ylim=(0, 40), yticks=np.arange(0, 40, 5))
+    chart.set_title("Historical U.S. Federal Debt, $T   (source: https://fiscaldata.treasury.gov/")
+    strEnd = f"${round(y1.iloc[-1], 1)}T"
+    chart.text(x1.iloc[-1]-10, y1.iloc[-1], strEnd, color='#DC7633')
+    
+    # Save it to a temporary buffer.
+    buf = BytesIO()
+    fig.savefig(buf, format="png")
+
     # Embed the result in the html output.
     return base64.b64encode(buf.getbuffer()).decode("ascii")
 
@@ -327,15 +376,24 @@ def longCycles(df, cycDf, colorObj):
     return base64.b64encode(buf.getbuffer()).decode("ascii")
 
 
-def barAnnual(df):
+def barAnnual(din):
+
+    # munge data
+    today_val = din.iloc[-1].Close/din.iloc[0].Close
+    newDateRange = pd.date_range('1/1/1950', din.index[-1]) 
+    d = (din.reindex(newDateRange, method='bfill').Close/din.Close[0]).resample("AS").asfreq().to_frame()
+    nxt = d.iloc[1:].Close.tolist()
+    nxt.append(today_val)
+    d['nextYear'] = nxt
+    d['annReturn'] = round(((d.nextYear/d.Close)-1)*100,2)
+    d['year'] = pd.DatetimeIndex(d.index).year
 
     #plot bar chart
+    x1 = d.year
+    y1 = d.annReturn
     fig = matplotlib.figure.Figure(figsize=(10,6))
-    # matplotlib.pyplot.style.use('ggplot')
     chart = fig.subplots()
-    # chart = fig.figure.Figure.subplots()
-    x1 = df.year
-    y1 = df.annReturn
+
     chart.grid(True, linestyle='-', zorder=0, linewidth=0.1, color='#3498DB')
     chart.bar(x1, y1, color="#2874A6", zorder=3)
 
@@ -349,7 +407,7 @@ def barAnnual(df):
     lastBar.set_color("#64DD17")
     barWidth = lastBar.get_width()
     strB = f"YTD {lastBar.get_height()}%"
-    chart.annotate(strB, xy=(lastBar.get_x()-3, lastBar.get_height()-5), fontsize=10)
+    chart.annotate(strB, xy=(lastBar.get_x(), lastBar.get_height()+1), fontsize=10)
 
     # Save it to a temporary buffer.
     buf = BytesIO()
