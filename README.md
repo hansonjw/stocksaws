@@ -15,7 +15,7 @@ The financial data is obtained through [yfinance](https://pypi.org/project/yfina
 
 ## Deployment
 The website was built with Flask, and the application is deployed at AWS.
-
+[link](http://stocksaws-env.eba-ryff9kni.us-east-1.elasticbeanstalk.com/today)
 
 ## Author
 This app was created and is maintained by [Justin Hanson](https://www.justin-codes.com)
