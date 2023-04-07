@@ -14,14 +14,14 @@
         <div class="navbar justify-content-center">
             <ul class="nav nav-pills nav-fill">
                 <li class="nav-item">
-                    <a class="{{ 'nav-link active' if active_page=='today' else 'nav-link' }}" href="{{ url_for('routes.today') }}">Today</a>
+                    <a class="{{ 'nav-link active' if active_page=='today' else 'nav-link' }}" href="{{ url_for('routes.today') }}">Current Cycle</a>
                 </li>
                 <li class="nav-item">
                     <a class="{{ 'nav-link active' if active_page=='history' else 'nav-link' }}" href="{{ url_for('routes.history') }}">History</a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="{{ 'nav-link active' if active_page=='debt' else 'nav-link' }}" href="{{ url_for('routes.debt') }}">Debt</a>
-                </li>
+                </li> -->
             </ul>
         </div>
     </nav>
