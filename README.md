@@ -9,13 +9,13 @@ The following are examples of the charts you will see at the deployed site:
 
 ![example chart](./docs/chart2.png)
 
-## Dependencies and technologies
+## Dependencies and Technologies
 This application leverages Python and libraries such as Numpy, Pandas, and Matplotlib.
 The financial data is obtained through [yfinance](https://pypi.org/project/yfinance/)
 
 ## Deployment
-The website was built with Flask, and the application is deployed at AWS.
-[link](http://stocksaws-env.eba-ryff9kni.us-east-1.elasticbeanstalk.com/today)
+The website was built with Flask, and the application is deployed at AWS through code pipeline and elastic beanstalk.
+[link](http://stocksawscodepipeline-env.eba-yxmwsyyg.us-east-2.elasticbeanstalk.com/today)
 
 ## Author
 This app was created and is maintained by [Justin Hanson](https://www.justin-codes.com)
